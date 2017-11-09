@@ -1,6 +1,6 @@
 {
   "name": "make_me_a_sandwich",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ordering a sandwich through jimmy johns. Inspiration from @travist and xkcd",
   "main": "./lib/makemeasandwich.js",
   "scripts": {
