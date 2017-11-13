@@ -20,9 +20,21 @@ func main() {
     }
     email, password := getUserLoginInfo();
 
-    fmt.Println(email);
-    fmt.Println(password);
+    //fmt.Println(email);
+    //fmt.Println(password);
 
+    fm, _ := bow.Form("form#loginForm")
+    fm.Input("email",email);
+    fm.Input("loginPassword",password);
+    //if fm.Submit() != nil {
+    //    panic(err)
+    //}
+    err = bow.Click("a#loginButton")
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Println(bow.Title());
 }
 
 func getUserLoginInfo() (string, string) {
