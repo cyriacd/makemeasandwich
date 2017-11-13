@@ -1,36 +1,40 @@
 package main
 
 import (
-  "fmt"
-  "os"
-  "runtime"
-
-  "github.com/gotk3/gotk3/gtk"
-  "github.com/sourcegraph/webloop"
+    "gopkg.in/headzoo/surf.v1"
+    "fmt"
 )
 
 func main() {
-	gtk.Init(nil)
-	go func() {
-		runtime.LockOSThread()
-		gtk.Main()
-	}()
+    // Create a new browser and open reddit.
+    bow := surf.NewBrowser()
+    err := bow.Open("https://cyriacdomini.com/")
+    if err != nil {
+        panic(err)
+    }
 
-	ctx := webloop.New()
-	view := ctx.NewView()
-	defer view.Close()
-	view.Open("http://google.com")
-	err := view.Wait()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to load URL: %s", err)
-		os.Exit(1)
-	}
-	res, err := view.EvaluateJavaScript("document.title")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to run JavaScript: %s", err)
-		os.Exit(1)
-	}
-	fmt.Printf("JavaScript returned: %q\n", res)
-	// output:
-	// JavaScript returned: "Google" 
+    // Outputs: "reddit: the front page of the internet"
+    fmt.Println(bow.Title())
+
+    // Click the link for the newest submissions.
+    bow.Click("a.new")
+
+    // Outputs: "newest submissions: reddit.com"
+    //fmt.Println(bow.Title())
+
+    // Log in to the site.
+    //fm, _ := bow.Form("form.login-form")
+    //fm.Input("user", "JoeRedditor")
+    //fm.Input("passwd", "d234rlkasd")
+    //if fm.Submit() != nil {
+    //    panic(err)
+    //}
+
+    // Go back to the "newest submissions" page, bookmark it, and
+    // print the title of every link on the page.
+    //bow.Back()
+    //bow.Bookmark("reddit-new")
+    //bow.Find("a.title").Each(func(_ int, s *goquery.Selection) {
+    //    fmt.Println(s.Text())
+    //})
 }
