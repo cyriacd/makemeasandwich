@@ -3,38 +3,45 @@ package main
 import (
     "gopkg.in/headzoo/surf.v1"
     "fmt"
+    "bufio"
+    "os"
+    "strings"
+    "syscall"
+
+    "golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
     // Create a new browser and open reddit.
     bow := surf.NewBrowser()
-    err := bow.Open("https://cyriacdomini.com/")
+    err := bow.Open("https://online.jimmyjohns.com/#/login")
     if err != nil {
         panic(err)
     }
+    email, password := getUserLoginInfo();
 
-    // Outputs: "reddit: the front page of the internet"
-    fmt.Println(bow.Title())
+    fmt.Println(email);
+    fmt.Println(password);
 
-    // Click the link for the newest submissions.
-    bow.Click("a.new")
+}
 
-    // Outputs: "newest submissions: reddit.com"
-    //fmt.Println(bow.Title())
+func getUserLoginInfo() (string, string) {
+    //TODO Read config file with login credentials and call function if it doesnt work
+    return credentials()
+}
 
-    // Log in to the site.
-    //fm, _ := bow.Form("form.login-form")
-    //fm.Input("user", "JoeRedditor")
-    //fm.Input("passwd", "d234rlkasd")
-    //if fm.Submit() != nil {
-    //    panic(err)
-    //}
+func credentials() (string, string){
+    reader := bufio.NewReader(os.Stdin)
 
-    // Go back to the "newest submissions" page, bookmark it, and
-    // print the title of every link on the page.
-    //bow.Back()
-    //bow.Bookmark("reddit-new")
-    //bow.Find("a.title").Each(func(_ int, s *goquery.Selection) {
-    //    fmt.Println(s.Text())
-    //})
+    fmt.Print("Enter Email: ")
+    email, _ := reader.ReadString('\n')
+
+    fmt.Print("Enter Password: ")
+    bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+    if err == nil {
+        fmt.Println("\nPassword typed: " + string(bytePassword))
+    }
+    password := string(bytePassword)
+
+    return strings.TrimSpace(email), strings.TrimSpace(password)
 }
