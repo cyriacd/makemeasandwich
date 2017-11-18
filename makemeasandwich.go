@@ -23,7 +23,7 @@ func main() {
     //fmt.Println(email);
     //fmt.Println(password);
 
-    fm, _ := bow.Form("form#loginForm")
+    fm, _ := bow.Form("form.ng-dirty")
     fm.Input("email",email);
     fm.Input("loginPassword",password);
     //if fm.Submit() != nil {
